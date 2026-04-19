@@ -2,14 +2,14 @@
 
 import { useEffect, useState } from "react";
 import {
-  probeViewportBottomCenterTerracotta,
+  probeViewportBottomLeftTerracotta,
   probeViewportTopCenterTerracotta,
 } from "@/lib/viewport-surface";
 
-export type TerracottaProbe = "topCenter" | "bottomCenter";
+export type TerracottaProbe = "topCenter" | "bottomLeft";
 
 /**
- * Tracks whether a fixed UI point (top or bottom center) sits over a `.terracotta-band` section.
+ * Tracks whether a fixed UI point sits over a `.terracotta-band` section.
  * Updates on scroll/resize (rAF-throttled).
  */
 export function useTerracottaAtProbe(
@@ -24,7 +24,7 @@ export function useTerracottaAtProbe(
     const probe =
       variant === "topCenter"
         ? probeViewportTopCenterTerracotta
-        : probeViewportBottomCenterTerracotta;
+        : probeViewportBottomLeftTerracotta;
 
     let rafId = 0;
     const tick = () => {

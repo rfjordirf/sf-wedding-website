@@ -21,9 +21,9 @@ export function probeViewportTopCenterTerracotta(): boolean {
   return isPointOverTerracottaBand(cx, cy);
 }
 
-/** Probe near bottom center (fixed brand logo). */
-export function probeViewportBottomCenterTerracotta(): boolean {
-  const cx = window.innerWidth / 2;
-  const cy = window.innerHeight - Math.max(40, 52);
+/** Probe near bottom-left (fixed brand logo). */
+export function probeViewportBottomLeftTerracotta(): boolean {
+  const cx = Math.max(36, Math.min(72, window.innerWidth * 0.12));
+  const cy = window.innerHeight - Math.max(36, 48);
   return isPointOverTerracottaBand(cx, cy);
 }

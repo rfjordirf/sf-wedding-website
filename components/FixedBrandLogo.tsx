@@ -22,15 +22,15 @@ type Props = {
 };
 
 export function FixedBrandLogo({ hidden = false }: Props) {
-  const onTerracotta = useTerracottaAtProbe("bottomCenter", !hidden);
+  const onTerracotta = useTerracottaAtProbe("bottomLeft", !hidden);
 
   if (hidden) return null;
 
   const boxClass =
-    "h-7 w-auto max-w-[min(42vw,9rem)] sm:h-8 sm:max-w-[10rem] opacity-[0.9] drop-shadow-[0_1px_3px_rgba(46,58,31,0.12)]";
+    "h-4 w-auto max-w-[min(32vw,4.25rem)] sm:h-5 sm:max-w-[4.75rem] opacity-[0.9] drop-shadow-[0_1px_2px_rgba(46,58,31,0.1)]";
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex justify-center px-4 pb-[max(0.65rem,env(safe-area-inset-bottom,0px))] pt-2">
+    <div className="pointer-events-none fixed inset-x-0 bottom-0 z-[60] flex justify-start pl-[max(0.65rem,env(safe-area-inset-left,0px))] pr-4 pb-[max(0.5rem,env(safe-area-inset-bottom,0px))] pt-2">
       <a
         href={BRAND_LOGO_LINK_URL}
         target="_blank"
@@ -51,7 +51,7 @@ export function FixedBrandLogo({ hidden = false }: Props) {
           />
         ) : (
           <div
-            className="h-7 max-w-[min(42vw,9rem)] aspect-[200/60] opacity-[0.9] drop-shadow-[0_1px_3px_rgba(46,58,31,0.12)] sm:h-8 sm:max-w-[10rem]"
+            className="h-4 max-w-[min(32vw,4.25rem)] aspect-[200/60] opacity-[0.9] drop-shadow-[0_1px_2px_rgba(46,58,31,0.1)] sm:h-5 sm:max-w-[4.75rem]"
             style={maskStyle(BRAND_LOGO_PNG_PATH)}
             aria-hidden
           />
