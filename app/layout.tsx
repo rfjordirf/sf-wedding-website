@@ -37,7 +37,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${display.variable} ${body.variable} h-full scroll-smooth antialiased`}
+      className={`${display.variable} ${body.variable} h-full antialiased`}
     >
       <body className="site-body">
         <Providers>

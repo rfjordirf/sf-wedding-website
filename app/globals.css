@@ -63,6 +63,8 @@ html {
   scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
   scroll-padding: 0;
+  /* Avoid scroll chaining into parent / rubber-band weirdness with snap */
+  overscroll-behavior-y: none;
 }
 
 #main-content > * {
@@ -74,6 +76,23 @@ html {
   box-sizing: border-box;
   /* Override Tailwind scroll-mt-* on sections — see comment on html snap rules */
   scroll-margin: 0;
+}
+
+/*
+  Mobile: iOS/Android often glitch when mandatory snap + scroll-behavior: smooth + dvh
+  (toolbar resize) + scroll-snap-stop: always fight touch momentum. Use native scrolling,
+  softer snap, stable viewport height, and allow skipping past a section in one gesture.
+*/
+@media (max-width: 639px) {
+  html {
+    scroll-behavior: auto;
+    scroll-snap-type: y proximity;
+  }
+
+  #main-content > * {
+    scroll-snap-stop: normal;
+    min-height: 100svh;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
