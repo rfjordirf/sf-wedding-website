@@ -1,26 +1,403 @@
 @import "tailwindcss";
 
+/* Editorial wedding — crudo, terracotta, olive. Sharp corners, no pure white. */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-cream: #e8e4da;
+  --color-linen: #ddd9ce;
+  --color-terracotta: #c9837a;
+  --color-ink: #2e3a1f;
+  --color-btn-hover: #4a5e30;
+  --color-olive: #5a6e3a;
+  --color-muted: #7a8a60;
+  --color-rule: rgba(46, 58, 31, 0.18);
+  /* Legacy aliases */
+  --color-paper: var(--color-cream);
+  --color-parchment: var(--color-cream);
+  --color-paper-deep: var(--color-linen);
+  --color-wash: var(--color-linen);
+  --color-ink-muted: var(--color-muted);
+  --color-ink-soft: var(--color-olive);
+  --color-brass: var(--color-olive);
+  --color-brass-light: var(--color-olive);
+  --color-gold: var(--color-olive);
+  --color-gold-deep: var(--color-ink);
+  --color-card: var(--color-linen);
+  --color-success-bg: var(--color-linen);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+.site-body {
+  min-height: 100dvh;
+  overflow-x: hidden;
+  background: var(--color-cream);
+  color: var(--color-ink);
+  padding: max(0.5rem, env(safe-area-inset-top))
+    max(0.5rem, env(safe-area-inset-right))
+    max(0.5rem, env(safe-area-inset-bottom))
+    max(0.5rem, env(safe-area-inset-left));
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@media (min-width: 640px) {
+  .site-body {
+    padding: 1rem 1.25rem 1.5rem;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.site-shell {
+  position: relative;
+  z-index: 1;
+  margin-inline: auto;
+  min-height: calc(100dvh - 1rem);
+  width: 100%;
+  max-width: min(100%, 40rem);
+  background: var(--color-cream);
+  color: var(--color-ink);
+}
+
+/* Full-viewport sections + smooth snap (wheel + touch) — disabled when reduced motion.
+   Snap targets must not use scroll-margin (e.g. scroll-mt-* for anchors): it offsets snap
+   points and leaves the previous section visible. We zero it here.
+   Do NOT set scroll-padding on html unless there is a fixed overlay: it insets the snapport
+   and a band above each section still shows the previous section — looks “off-center”. The
+   page frame is already inset via .site-body padding. */
+html {
+  scroll-snap-type: y mandatory;
+  scroll-behavior: smooth;
+  scroll-padding: 0;
+}
+
+#main-content > * {
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
+  /* svh first: stable viewport height; dvh follows where supported (dynamic toolbar). */
+  min-height: 100svh;
+  min-height: 100dvh;
+  box-sizing: border-box;
+  /* Override Tailwind scroll-mt-* on sections — see comment on html snap rules */
+  scroll-margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-snap-type: none;
+    scroll-behavior: auto;
+  }
+
+  #main-content > * {
+    scroll-snap-stop: normal;
+  }
+}
+
+/* Break out of .site-shell max-width — full viewport width */
+.full-bleed {
+  width: 100vw;
+  max-width: none;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  position: relative;
+}
+
+@layer base {
+  .font-display {
+    font-family: var(--font-display), "Cormorant Garamond", Georgia, serif;
+    font-feature-settings: "kern" 1, "liga" 1;
+  }
+
+  .font-body {
+    font-family: var(--font-body), Jost, system-ui, sans-serif;
+  }
+
+  .font-ui {
+    font-family: var(--font-body), Jost, system-ui, sans-serif;
+  }
+}
+
+/* Buttons — 90° corners */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  background: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-primary:hover {
+  background: var(--color-btn-hover);
+  border-color: var(--color-btn-hover);
+}
+
+.btn-primary:focus-visible {
+  outline: 2px solid var(--color-olive);
+  outline-offset: 3px;
+}
+
+.btn-outline {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 3rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+}
+
+.btn-outline:hover {
+  background: var(--color-ink);
+  color: var(--color-cream);
+}
+
+.btn-header-rsvp {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0 1.25rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  background: var(--color-ink);
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-header-rsvp:hover {
+  background: var(--color-btn-hover);
+  border-color: var(--color-btn-hover);
+}
+
+.btn-header-rsvp:focus-visible {
+  outline: 2px solid var(--color-olive);
+  outline-offset: 2px;
+}
+
+/* Terracotta band — cream typography on #c9837a */
+.terracotta-band {
+  position: relative;
+  background-color: var(--color-terracotta);
+  overflow: hidden;
+  --color-ink: #e8e4da;
+  --color-muted: rgba(232, 228, 218, 0.78);
+  --color-olive: #efe9df;
+  --color-rule: rgba(232, 228, 218, 0.4);
+  color: var(--color-ink);
+}
+
+/* Sunburst shapes only (no grain) — /public/terracotta-band-pattern.svg */
+.terracotta-band::before {
+  content: "";
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  opacity: 1;
+  background-image: url("/terracotta-band-pattern.svg");
+  background-size: 180px 180px;
+  background-repeat: repeat;
+}
+
+.terracotta-band > * {
+  position: relative;
+  z-index: 1;
+}
+
+/* Countdown tiles: light cards — dark ink inside cells only */
+.terracotta-band .countdown-cell {
+  --color-ink: #0a0c08;
+  --color-muted: #3d4538;
+  background: rgba(248, 246, 241, 0.94);
+  border-color: rgba(10, 12, 8, 0.2);
+}
+
+.terracotta-band .countdown-cell .countdown-label {
+  opacity: 1;
+  color: var(--color-muted);
+  font-weight: 600;
+}
+
+/* Slightly heavier body copy on terracotta (thin + low contrast was hard to read) */
+.terracotta-band .font-body {
+  font-weight: 400;
+}
+
+/* Splash — editorial full-bleed, no “card”; matches hero / cream sections */
+.splash-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: max(1.25rem, env(safe-area-inset-top)) max(1rem, env(safe-area-inset-right))
+    max(2rem, env(safe-area-inset-bottom)) max(1rem, env(safe-area-inset-left));
+  background: var(--color-cream);
+}
+
+.splash-overlay.is-leaving {
+  pointer-events: none;
+}
+
+.splash-overlay__inner {
+  position: relative;
+  z-index: 1;
+  width: min(100%, 22rem);
+  padding: 0 0.5rem;
+  text-align: center;
+}
+
+.splash-overlay__terra {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--color-terracotta);
+  z-index: 1;
+  transform-origin: bottom center;
+}
+
+.splash-overlay__btn {
+  min-height: 3rem;
+  min-width: 11rem;
+  padding: 0.75rem 1.5rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.32em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  background: transparent;
+  border: 1px solid var(--color-ink);
+  border-radius: 0;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+}
+
+.splash-overlay__btn:hover {
+  background: var(--color-ink);
+  color: var(--color-cream);
+  border-color: var(--color-ink);
+}
+
+.splash-overlay__btn:focus-visible {
+  outline: 2px solid var(--color-terracotta);
+  outline-offset: 3px;
+}
+
+.splash-overlay__btn:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+/* Countdown — on terracotta */
+.countdown-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  width: 100%;
+  max-width: 22rem;
+  margin-inline: auto;
+}
+
+@media (min-width: 640px) {
+  .countdown-grid {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    max-width: 36rem;
+    gap: 0.875rem;
+  }
+}
+
+.countdown-cell {
+  border-radius: 0;
+  border: 1px solid rgba(46, 58, 31, 0.25);
+  background: rgba(232, 228, 218, 0.35);
+  padding: 1rem 0.5rem;
+  text-align: center;
+}
+
+.countdown-value {
+  display: block;
+  font-family: var(--font-display), Georgia, serif;
+  font-size: clamp(1.65rem, 5vw, 2.1rem);
+  font-weight: 400;
+  line-height: 1;
+  color: var(--color-ink);
+  font-variant-numeric: tabular-nums;
+}
+
+.countdown-label {
+  display: block;
+  margin-top: 0.5rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.58rem;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--color-ink);
+  opacity: 0.85;
+}
+
+/* Form fields — sharp */
+.input-line {
+  margin-top: 0.5rem;
+  width: 100%;
+  border: none;
+  border-bottom: 1px solid var(--color-rule);
+  border-radius: 0;
+  background: transparent;
+  padding: 0.5rem 0;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--color-ink);
+  line-height: 1.6;
+  outline: none;
+  transition: border-color 0.2s ease;
+}
+
+.input-line:focus {
+  border-bottom-color: var(--color-ink);
+}
+
+.textarea-box {
+  margin-top: 0.5rem;
+  min-height: 120px;
+  width: 100%;
+  resize: vertical;
+  border: 1px solid var(--color-rule);
+  border-radius: 0;
+  background: var(--color-cream);
+  padding: 0.75rem;
+  font-family: var(--font-body), system-ui, sans-serif;
+  font-size: 0.9375rem;
+  font-weight: 300;
+  color: var(--color-ink);
+  line-height: 1.6;
+  outline: none;
+}
+
+.textarea-box:focus {
+  border-color: var(--color-ink);
 }
