@@ -11,7 +11,8 @@ import { useT } from "@/lib/i18n";
 export function CountdownBlock() {
   const t = useT();
   const target = useMemo(() => new Date(WEDDING_ISO), []);
-  const [now, setNow] = useState(() => new Date());
+  /** Avoid hydration mismatch: real clock only after mount (SSR + first client paint match). */
+  const [now, setNow] = useState<Date | null>(null);
 
   const labels = useMemo(
     () => ({
@@ -29,18 +30,28 @@ export function CountdownBlock() {
   );
 
   useEffect(() => {
-    const id = window.setInterval(() => setNow(new Date()), 250);
+    const tick = () => setNow(new Date());
+    tick();
+    const id = window.setInterval(tick, 250);
     return () => window.clearInterval(id);
   }, []);
 
-  const parts = getCountdownParts(target, now, labels);
+  const parts = getCountdownParts(target, now ?? target, labels);
+  const showLive = now !== null;
 
   return (
-    <div className="countdown-grid" role="timer" aria-live="polite">
+    <div
+      className="countdown-grid"
+      role="timer"
+      aria-live="polite"
+      aria-busy={!showLive}
+    >
       {parts.map((p) => (
         <div key={p.label} className="countdown-cell">
           <span className="countdown-value" aria-hidden="true">
-            {formatCountdownValue(p.label, p.value, labels.days)}
+            {showLive
+              ? formatCountdownValue(p.label, p.value, labels.days)
+              : "\u2014"}
           </span>
           <span className="countdown-label">{p.label}</span>
         </div>

@@ -1,5 +1,5 @@
-/** Ceremony date/time in Cincinnati (America/New_York). */
-export const WEDDING_ISO = "2026-05-09T16:00:00";
+/** Ceremony date/time in Cincinnati — offset required so SSR and browsers share one instant. */
+export const WEDDING_ISO = "2026-05-09T16:00:00-04:00";
 
 export const VENUE = {
   name: "Restaurant Three Brothers",

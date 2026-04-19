@@ -53,56 +53,13 @@
   color: var(--color-ink);
 }
 
-/* Full-viewport sections + smooth snap (wheel + touch) — disabled when reduced motion.
-   Snap targets must not use scroll-margin (e.g. scroll-mt-* for anchors): it offsets snap
-   points and leaves the previous section visible. We zero it here.
-   Do NOT set scroll-padding on html unless there is a fixed overlay: it insets the snapport
-   and a band above each section still shows the previous section — looks “off-center”. The
-   page frame is already inset via .site-body padding. */
 html {
-  scroll-snap-type: y mandatory;
   scroll-behavior: smooth;
-  scroll-padding: 0;
-  /* Avoid scroll chaining into parent / rubber-band weirdness with snap */
-  overscroll-behavior-y: none;
-}
-
-#main-content > * {
-  scroll-snap-align: start;
-  scroll-snap-stop: always;
-  /* svh first: stable viewport height; dvh follows where supported (dynamic toolbar). */
-  min-height: 100svh;
-  min-height: 100dvh;
-  box-sizing: border-box;
-  /* Override Tailwind scroll-mt-* on sections — see comment on html snap rules */
-  scroll-margin: 0;
-}
-
-/*
-  Mobile: iOS/Android often glitch when mandatory snap + scroll-behavior: smooth + dvh
-  (toolbar resize) + scroll-snap-stop: always fight touch momentum. Use native scrolling,
-  softer snap, stable viewport height, and allow skipping past a section in one gesture.
-*/
-@media (max-width: 639px) {
-  html {
-    scroll-behavior: auto;
-    scroll-snap-type: y proximity;
-  }
-
-  #main-content > * {
-    scroll-snap-stop: normal;
-    min-height: 100svh;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {
   html {
-    scroll-snap-type: none;
     scroll-behavior: auto;
-  }
-
-  #main-content > * {
-    scroll-snap-stop: normal;
   }
 }
 
